@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Azure.Core;
 using Azure.Core.Pipeline;
+using Azure.ResourceManager.Resources;
 
 namespace Azure.ResourceManager.CognitiveServices
 {
@@ -19,27 +20,25 @@ namespace Azure.ResourceManager.CognitiveServices
     /// A Class representing a RaiPolicy along with the instance operations that can be performed on it.
     /// If you have a <see cref="ResourceIdentifier"/> you can construct a <see cref="RaiPolicyResource"/>
     /// from an instance of <see cref="ArmClient"/> using the GetRaiPolicyResource method.
-    /// Otherwise you can get one from its parent resource <see cref="CognitiveServicesAccountResource"/> using the GetRaiPolicy method.
+    /// Otherwise you can get one from its parent resource <see cref="SubscriptionResource"/> using the GetRaiPolicy method.
     /// </summary>
     public partial class RaiPolicyResource : ArmResource
     {
         /// <summary> Generate the resource identifier of a <see cref="RaiPolicyResource"/> instance. </summary>
         /// <param name="subscriptionId"> The subscriptionId. </param>
-        /// <param name="resourceGroupName"> The resourceGroupName. </param>
-        /// <param name="accountName"> The accountName. </param>
         /// <param name="raiPolicyName"> The raiPolicyName. </param>
-        public static ResourceIdentifier CreateResourceIdentifier(string subscriptionId, string resourceGroupName, string accountName, string raiPolicyName)
+        public static ResourceIdentifier CreateResourceIdentifier(string subscriptionId, string raiPolicyName)
         {
-            var resourceId = $"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}";
+            var resourceId = $"/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}";
             return new ResourceIdentifier(resourceId);
         }
 
-        private readonly ClientDiagnostics _raiPolicyClientDiagnostics;
-        private readonly RaiPoliciesRestOperations _raiPolicyRestClient;
+        private readonly ClientDiagnostics _raiPolicySubscriptionRaiPolicyClientDiagnostics;
+        private readonly SubscriptionRaiPolicyRestOperations _raiPolicySubscriptionRaiPolicyRestClient;
         private readonly RaiPolicyData _data;
 
         /// <summary> Gets the resource type for the operations. </summary>
-        public static readonly ResourceType ResourceType = "Microsoft.CognitiveServices/accounts/raiPolicies";
+        public static readonly ResourceType ResourceType = "Microsoft.CognitiveServices/raiPolicy";
 
         /// <summary> Initializes a new instance of the <see cref="RaiPolicyResource"/> class for mocking. </summary>
         protected RaiPolicyResource()
@@ -60,9 +59,9 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <param name="id"> The identifier of the resource that is the target of operations. </param>
         internal RaiPolicyResource(ArmClient client, ResourceIdentifier id) : base(client, id)
         {
-            _raiPolicyClientDiagnostics = new ClientDiagnostics("Azure.ResourceManager.CognitiveServices", ResourceType.Namespace, Diagnostics);
-            TryGetApiVersion(ResourceType, out string raiPolicyApiVersion);
-            _raiPolicyRestClient = new RaiPoliciesRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint, raiPolicyApiVersion);
+            _raiPolicySubscriptionRaiPolicyClientDiagnostics = new ClientDiagnostics("Azure.ResourceManager.CognitiveServices", ResourceType.Namespace, Diagnostics);
+            TryGetApiVersion(ResourceType, out string raiPolicySubscriptionRaiPolicyApiVersion);
+            _raiPolicySubscriptionRaiPolicyRestClient = new SubscriptionRaiPolicyRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint, raiPolicySubscriptionRaiPolicyApiVersion);
 #if DEBUG
 			ValidateResourceId(Id);
 #endif
@@ -90,19 +89,19 @@ namespace Azure.ResourceManager.CognitiveServices
         }
 
         /// <summary>
-        /// Gets the specified Content Filters associated with the Azure OpenAI account.
+        /// Gets the specified Content Filters associated with the Subscription.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Get</description>
+        /// <description>SubscriptionRaiPolicy_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -113,11 +112,11 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         public virtual async Task<Response<RaiPolicyResource>> GetAsync(CancellationToken cancellationToken = default)
         {
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Get");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Get");
             scope.Start();
             try
             {
-                var response = await _raiPolicyRestClient.GetAsync(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken).ConfigureAwait(false);
+                var response = await _raiPolicySubscriptionRaiPolicyRestClient.GetAsync(Id.SubscriptionId, Id.Name, cancellationToken).ConfigureAwait(false);
                 if (response.Value == null)
                     throw new RequestFailedException(response.GetRawResponse());
                 return Response.FromValue(new RaiPolicyResource(Client, response.Value), response.GetRawResponse());
@@ -130,19 +129,19 @@ namespace Azure.ResourceManager.CognitiveServices
         }
 
         /// <summary>
-        /// Gets the specified Content Filters associated with the Azure OpenAI account.
+        /// Gets the specified Content Filters associated with the Subscription.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Get</description>
+        /// <description>SubscriptionRaiPolicy_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -153,11 +152,11 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         public virtual Response<RaiPolicyResource> Get(CancellationToken cancellationToken = default)
         {
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Get");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Get");
             scope.Start();
             try
             {
-                var response = _raiPolicyRestClient.Get(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken);
+                var response = _raiPolicySubscriptionRaiPolicyRestClient.Get(Id.SubscriptionId, Id.Name, cancellationToken);
                 if (response.Value == null)
                     throw new RequestFailedException(response.GetRawResponse());
                 return Response.FromValue(new RaiPolicyResource(Client, response.Value), response.GetRawResponse());
@@ -170,19 +169,19 @@ namespace Azure.ResourceManager.CognitiveServices
         }
 
         /// <summary>
-        /// Deletes the specified Content Filters associated with the Azure OpenAI account.
+        /// Deletes the specified Content Filters associated with the subscription.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Delete</description>
+        /// <description>SubscriptionRaiPolicy_Delete</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -194,12 +193,12 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         public virtual async Task<ArmOperation> DeleteAsync(WaitUntil waitUntil, CancellationToken cancellationToken = default)
         {
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Delete");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Delete");
             scope.Start();
             try
             {
-                var response = await _raiPolicyRestClient.DeleteAsync(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken).ConfigureAwait(false);
-                var operation = new CognitiveServicesArmOperation(_raiPolicyClientDiagnostics, Pipeline, _raiPolicyRestClient.CreateDeleteRequest(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name).Request, response, OperationFinalStateVia.Location);
+                var response = await _raiPolicySubscriptionRaiPolicyRestClient.DeleteAsync(Id.SubscriptionId, Id.Name, cancellationToken).ConfigureAwait(false);
+                var operation = new CognitiveServicesArmOperation(_raiPolicySubscriptionRaiPolicyClientDiagnostics, Pipeline, _raiPolicySubscriptionRaiPolicyRestClient.CreateDeleteRequest(Id.SubscriptionId, Id.Name).Request, response, OperationFinalStateVia.Location);
                 if (waitUntil == WaitUntil.Completed)
                     await operation.WaitForCompletionResponseAsync(cancellationToken).ConfigureAwait(false);
                 return operation;
@@ -212,19 +211,19 @@ namespace Azure.ResourceManager.CognitiveServices
         }
 
         /// <summary>
-        /// Deletes the specified Content Filters associated with the Azure OpenAI account.
+        /// Deletes the specified Content Filters associated with the subscription.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Delete</description>
+        /// <description>SubscriptionRaiPolicy_Delete</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -236,12 +235,12 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <param name="cancellationToken"> The cancellation token to use. </param>
         public virtual ArmOperation Delete(WaitUntil waitUntil, CancellationToken cancellationToken = default)
         {
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Delete");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Delete");
             scope.Start();
             try
             {
-                var response = _raiPolicyRestClient.Delete(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken);
-                var operation = new CognitiveServicesArmOperation(_raiPolicyClientDiagnostics, Pipeline, _raiPolicyRestClient.CreateDeleteRequest(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name).Request, response, OperationFinalStateVia.Location);
+                var response = _raiPolicySubscriptionRaiPolicyRestClient.Delete(Id.SubscriptionId, Id.Name, cancellationToken);
+                var operation = new CognitiveServicesArmOperation(_raiPolicySubscriptionRaiPolicyClientDiagnostics, Pipeline, _raiPolicySubscriptionRaiPolicyRestClient.CreateDeleteRequest(Id.SubscriptionId, Id.Name).Request, response, OperationFinalStateVia.Location);
                 if (waitUntil == WaitUntil.Completed)
                     operation.WaitForCompletionResponse(cancellationToken);
                 return operation;
@@ -254,19 +253,19 @@ namespace Azure.ResourceManager.CognitiveServices
         }
 
         /// <summary>
-        /// Update the state of specified Content Filters associated with the Azure OpenAI account.
+        /// Update the state of specified Content Filters associated with the subscription.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_CreateOrUpdate</description>
+        /// <description>SubscriptionRaiPolicy_CreateOrUpdate</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -282,12 +281,12 @@ namespace Azure.ResourceManager.CognitiveServices
         {
             Argument.AssertNotNull(data, nameof(data));
 
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Update");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Update");
             scope.Start();
             try
             {
-                var response = await _raiPolicyRestClient.CreateOrUpdateAsync(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, data, cancellationToken).ConfigureAwait(false);
-                var uri = _raiPolicyRestClient.CreateCreateOrUpdateRequestUri(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, data);
+                var response = await _raiPolicySubscriptionRaiPolicyRestClient.CreateOrUpdateAsync(Id.SubscriptionId, Id.Name, data, cancellationToken).ConfigureAwait(false);
+                var uri = _raiPolicySubscriptionRaiPolicyRestClient.CreateCreateOrUpdateRequestUri(Id.SubscriptionId, Id.Name, data);
                 var rehydrationToken = NextLinkOperationImplementation.GetRehydrationToken(RequestMethod.Put, uri.ToUri(), uri.ToString(), "None", null, OperationFinalStateVia.OriginalUri.ToString());
                 var operation = new CognitiveServicesArmOperation<RaiPolicyResource>(Response.FromValue(new RaiPolicyResource(Client, response), response.GetRawResponse()), rehydrationToken);
                 if (waitUntil == WaitUntil.Completed)
@@ -302,19 +301,19 @@ namespace Azure.ResourceManager.CognitiveServices
         }
 
         /// <summary>
-        /// Update the state of specified Content Filters associated with the Azure OpenAI account.
+        /// Update the state of specified Content Filters associated with the subscription.
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_CreateOrUpdate</description>
+        /// <description>SubscriptionRaiPolicy_CreateOrUpdate</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -330,12 +329,12 @@ namespace Azure.ResourceManager.CognitiveServices
         {
             Argument.AssertNotNull(data, nameof(data));
 
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Update");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.Update");
             scope.Start();
             try
             {
-                var response = _raiPolicyRestClient.CreateOrUpdate(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, data, cancellationToken);
-                var uri = _raiPolicyRestClient.CreateCreateOrUpdateRequestUri(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, data);
+                var response = _raiPolicySubscriptionRaiPolicyRestClient.CreateOrUpdate(Id.SubscriptionId, Id.Name, data, cancellationToken);
+                var uri = _raiPolicySubscriptionRaiPolicyRestClient.CreateCreateOrUpdateRequestUri(Id.SubscriptionId, Id.Name, data);
                 var rehydrationToken = NextLinkOperationImplementation.GetRehydrationToken(RequestMethod.Put, uri.ToUri(), uri.ToString(), "None", null, OperationFinalStateVia.OriginalUri.ToString());
                 var operation = new CognitiveServicesArmOperation<RaiPolicyResource>(Response.FromValue(new RaiPolicyResource(Client, response), response.GetRawResponse()), rehydrationToken);
                 if (waitUntil == WaitUntil.Completed)
@@ -354,15 +353,15 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Get</description>
+        /// <description>SubscriptionRaiPolicy_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -379,7 +378,7 @@ namespace Azure.ResourceManager.CognitiveServices
             Argument.AssertNotNull(key, nameof(key));
             Argument.AssertNotNull(value, nameof(value));
 
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.AddTag");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.AddTag");
             scope.Start();
             try
             {
@@ -388,7 +387,7 @@ namespace Azure.ResourceManager.CognitiveServices
                     var originalTags = await GetTagResource().GetAsync(cancellationToken).ConfigureAwait(false);
                     originalTags.Value.Data.TagValues[key] = value;
                     await GetTagResource().CreateOrUpdateAsync(WaitUntil.Completed, originalTags.Value.Data, cancellationToken: cancellationToken).ConfigureAwait(false);
-                    var originalResponse = await _raiPolicyRestClient.GetAsync(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken).ConfigureAwait(false);
+                    var originalResponse = await _raiPolicySubscriptionRaiPolicyRestClient.GetAsync(Id.SubscriptionId, Id.Name, cancellationToken).ConfigureAwait(false);
                     return Response.FromValue(new RaiPolicyResource(Client, originalResponse.Value), originalResponse.GetRawResponse());
                 }
                 else
@@ -411,15 +410,15 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Get</description>
+        /// <description>SubscriptionRaiPolicy_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -436,7 +435,7 @@ namespace Azure.ResourceManager.CognitiveServices
             Argument.AssertNotNull(key, nameof(key));
             Argument.AssertNotNull(value, nameof(value));
 
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.AddTag");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.AddTag");
             scope.Start();
             try
             {
@@ -445,7 +444,7 @@ namespace Azure.ResourceManager.CognitiveServices
                     var originalTags = GetTagResource().Get(cancellationToken);
                     originalTags.Value.Data.TagValues[key] = value;
                     GetTagResource().CreateOrUpdate(WaitUntil.Completed, originalTags.Value.Data, cancellationToken: cancellationToken);
-                    var originalResponse = _raiPolicyRestClient.Get(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken);
+                    var originalResponse = _raiPolicySubscriptionRaiPolicyRestClient.Get(Id.SubscriptionId, Id.Name, cancellationToken);
                     return Response.FromValue(new RaiPolicyResource(Client, originalResponse.Value), originalResponse.GetRawResponse());
                 }
                 else
@@ -468,15 +467,15 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Get</description>
+        /// <description>SubscriptionRaiPolicy_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -491,7 +490,7 @@ namespace Azure.ResourceManager.CognitiveServices
         {
             Argument.AssertNotNull(tags, nameof(tags));
 
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.SetTags");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.SetTags");
             scope.Start();
             try
             {
@@ -501,7 +500,7 @@ namespace Azure.ResourceManager.CognitiveServices
                     var originalTags = await GetTagResource().GetAsync(cancellationToken).ConfigureAwait(false);
                     originalTags.Value.Data.TagValues.ReplaceWith(tags);
                     await GetTagResource().CreateOrUpdateAsync(WaitUntil.Completed, originalTags.Value.Data, cancellationToken: cancellationToken).ConfigureAwait(false);
-                    var originalResponse = await _raiPolicyRestClient.GetAsync(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken).ConfigureAwait(false);
+                    var originalResponse = await _raiPolicySubscriptionRaiPolicyRestClient.GetAsync(Id.SubscriptionId, Id.Name, cancellationToken).ConfigureAwait(false);
                     return Response.FromValue(new RaiPolicyResource(Client, originalResponse.Value), originalResponse.GetRawResponse());
                 }
                 else
@@ -524,15 +523,15 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Get</description>
+        /// <description>SubscriptionRaiPolicy_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -547,7 +546,7 @@ namespace Azure.ResourceManager.CognitiveServices
         {
             Argument.AssertNotNull(tags, nameof(tags));
 
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.SetTags");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.SetTags");
             scope.Start();
             try
             {
@@ -557,7 +556,7 @@ namespace Azure.ResourceManager.CognitiveServices
                     var originalTags = GetTagResource().Get(cancellationToken);
                     originalTags.Value.Data.TagValues.ReplaceWith(tags);
                     GetTagResource().CreateOrUpdate(WaitUntil.Completed, originalTags.Value.Data, cancellationToken: cancellationToken);
-                    var originalResponse = _raiPolicyRestClient.Get(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken);
+                    var originalResponse = _raiPolicySubscriptionRaiPolicyRestClient.Get(Id.SubscriptionId, Id.Name, cancellationToken);
                     return Response.FromValue(new RaiPolicyResource(Client, originalResponse.Value), originalResponse.GetRawResponse());
                 }
                 else
@@ -580,15 +579,15 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Get</description>
+        /// <description>SubscriptionRaiPolicy_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -603,7 +602,7 @@ namespace Azure.ResourceManager.CognitiveServices
         {
             Argument.AssertNotNull(key, nameof(key));
 
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.RemoveTag");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.RemoveTag");
             scope.Start();
             try
             {
@@ -612,7 +611,7 @@ namespace Azure.ResourceManager.CognitiveServices
                     var originalTags = await GetTagResource().GetAsync(cancellationToken).ConfigureAwait(false);
                     originalTags.Value.Data.TagValues.Remove(key);
                     await GetTagResource().CreateOrUpdateAsync(WaitUntil.Completed, originalTags.Value.Data, cancellationToken: cancellationToken).ConfigureAwait(false);
-                    var originalResponse = await _raiPolicyRestClient.GetAsync(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken).ConfigureAwait(false);
+                    var originalResponse = await _raiPolicySubscriptionRaiPolicyRestClient.GetAsync(Id.SubscriptionId, Id.Name, cancellationToken).ConfigureAwait(false);
                     return Response.FromValue(new RaiPolicyResource(Client, originalResponse.Value), originalResponse.GetRawResponse());
                 }
                 else
@@ -635,15 +634,15 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <list type="bullet">
         /// <item>
         /// <term>Request Path</term>
-        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiPolicies/{raiPolicyName}</description>
+        /// <description>/subscriptions/{subscriptionId}/providers/Microsoft.CognitiveServices/raiPolicy/{raiPolicyName}</description>
         /// </item>
         /// <item>
         /// <term>Operation Id</term>
-        /// <description>RaiPolicies_Get</description>
+        /// <description>SubscriptionRaiPolicy_Get</description>
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -658,7 +657,7 @@ namespace Azure.ResourceManager.CognitiveServices
         {
             Argument.AssertNotNull(key, nameof(key));
 
-            using var scope = _raiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.RemoveTag");
+            using var scope = _raiPolicySubscriptionRaiPolicyClientDiagnostics.CreateScope("RaiPolicyResource.RemoveTag");
             scope.Start();
             try
             {
@@ -667,7 +666,7 @@ namespace Azure.ResourceManager.CognitiveServices
                     var originalTags = GetTagResource().Get(cancellationToken);
                     originalTags.Value.Data.TagValues.Remove(key);
                     GetTagResource().CreateOrUpdate(WaitUntil.Completed, originalTags.Value.Data, cancellationToken: cancellationToken);
-                    var originalResponse = _raiPolicyRestClient.Get(Id.SubscriptionId, Id.ResourceGroupName, Id.Parent.Name, Id.Name, cancellationToken);
+                    var originalResponse = _raiPolicySubscriptionRaiPolicyRestClient.Get(Id.SubscriptionId, Id.Name, cancellationToken);
                     return Response.FromValue(new RaiPolicyResource(Client, originalResponse.Value), originalResponse.GetRawResponse());
                 }
                 else

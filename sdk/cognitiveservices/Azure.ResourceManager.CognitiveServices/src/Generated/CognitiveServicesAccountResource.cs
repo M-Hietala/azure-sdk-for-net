@@ -40,6 +40,10 @@ namespace Azure.ResourceManager.CognitiveServices
         private readonly AccountsRestOperations _cognitiveServicesAccountAccountsRestClient;
         private readonly ClientDiagnostics _privateLinkResourcesClientDiagnostics;
         private readonly PrivateLinkResourcesRestOperations _privateLinkResourcesRestClient;
+        private readonly ClientDiagnostics _testRaiExternalSafetyProviderClientDiagnostics;
+        private readonly TestRaiExternalSafetyProviderRestOperations _testRaiExternalSafetyProviderRestClient;
+        private readonly ClientDiagnostics _managedNetworkProvisionsClientDiagnostics;
+        private readonly ManagedNetworkProvisionsRestOperations _managedNetworkProvisionsRestClient;
         private readonly CognitiveServicesAccountData _data;
 
         /// <summary> Gets the resource type for the operations. </summary>
@@ -69,6 +73,10 @@ namespace Azure.ResourceManager.CognitiveServices
             _cognitiveServicesAccountAccountsRestClient = new AccountsRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint, cognitiveServicesAccountAccountsApiVersion);
             _privateLinkResourcesClientDiagnostics = new ClientDiagnostics("Azure.ResourceManager.CognitiveServices", ProviderConstants.DefaultProviderNamespace, Diagnostics);
             _privateLinkResourcesRestClient = new PrivateLinkResourcesRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint);
+            _testRaiExternalSafetyProviderClientDiagnostics = new ClientDiagnostics("Azure.ResourceManager.CognitiveServices", ProviderConstants.DefaultProviderNamespace, Diagnostics);
+            _testRaiExternalSafetyProviderRestClient = new TestRaiExternalSafetyProviderRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint);
+            _managedNetworkProvisionsClientDiagnostics = new ClientDiagnostics("Azure.ResourceManager.CognitiveServices", ProviderConstants.DefaultProviderNamespace, Diagnostics);
+            _managedNetworkProvisionsRestClient = new ManagedNetworkProvisionsRestOperations(Pipeline, Diagnostics.ApplicationId, Endpoint);
 #if DEBUG
 			ValidateResourceId(Id);
 #endif
@@ -115,7 +123,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -146,7 +154,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -184,7 +192,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -215,7 +223,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -253,7 +261,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -284,7 +292,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -322,7 +330,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -353,7 +361,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -371,11 +379,11 @@ namespace Azure.ResourceManager.CognitiveServices
             return GetCognitiveServicesEncryptionScopes().Get(encryptionScopeName, cancellationToken);
         }
 
-        /// <summary> Gets a collection of RaiPolicyResources in the CognitiveServicesAccount. </summary>
-        /// <returns> An object representing collection of RaiPolicyResources and their operations over a RaiPolicyResource. </returns>
-        public virtual RaiPolicyCollection GetRaiPolicies()
+        /// <summary> Gets a collection of AccountRaiPolicyResources in the CognitiveServicesAccount. </summary>
+        /// <returns> An object representing collection of AccountRaiPolicyResources and their operations over a AccountRaiPolicyResource. </returns>
+        public virtual AccountRaiPolicyCollection GetAccountRaiPolicies()
         {
-            return GetCachedClient(client => new RaiPolicyCollection(client, Id));
+            return GetCachedClient(client => new AccountRaiPolicyCollection(client, Id));
         }
 
         /// <summary>
@@ -391,11 +399,11 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
-        /// <description><see cref="RaiPolicyResource"/></description>
+        /// <description><see cref="AccountRaiPolicyResource"/></description>
         /// </item>
         /// </list>
         /// </summary>
@@ -404,9 +412,9 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <exception cref="ArgumentNullException"> <paramref name="raiPolicyName"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="raiPolicyName"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public virtual async Task<Response<RaiPolicyResource>> GetRaiPolicyAsync(string raiPolicyName, CancellationToken cancellationToken = default)
+        public virtual async Task<Response<AccountRaiPolicyResource>> GetAccountRaiPolicyAsync(string raiPolicyName, CancellationToken cancellationToken = default)
         {
-            return await GetRaiPolicies().GetAsync(raiPolicyName, cancellationToken).ConfigureAwait(false);
+            return await GetAccountRaiPolicies().GetAsync(raiPolicyName, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -422,11 +430,11 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
-        /// <description><see cref="RaiPolicyResource"/></description>
+        /// <description><see cref="AccountRaiPolicyResource"/></description>
         /// </item>
         /// </list>
         /// </summary>
@@ -435,9 +443,9 @@ namespace Azure.ResourceManager.CognitiveServices
         /// <exception cref="ArgumentNullException"> <paramref name="raiPolicyName"/> is null. </exception>
         /// <exception cref="ArgumentException"> <paramref name="raiPolicyName"/> is an empty string, and was expected to be non-empty. </exception>
         [ForwardsClientCalls]
-        public virtual Response<RaiPolicyResource> GetRaiPolicy(string raiPolicyName, CancellationToken cancellationToken = default)
+        public virtual Response<AccountRaiPolicyResource> GetAccountRaiPolicy(string raiPolicyName, CancellationToken cancellationToken = default)
         {
-            return GetRaiPolicies().Get(raiPolicyName, cancellationToken);
+            return GetAccountRaiPolicies().Get(raiPolicyName, cancellationToken);
         }
 
         /// <summary> Gets a collection of RaiBlocklistResources in the CognitiveServicesAccount. </summary>
@@ -460,7 +468,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -491,7 +499,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -507,6 +515,144 @@ namespace Azure.ResourceManager.CognitiveServices
         public virtual Response<RaiBlocklistResource> GetRaiBlocklist(string raiBlocklistName, CancellationToken cancellationToken = default)
         {
             return GetRaiBlocklists().Get(raiBlocklistName, cancellationToken);
+        }
+
+        /// <summary> Gets a collection of RaiTopicResources in the CognitiveServicesAccount. </summary>
+        /// <returns> An object representing collection of RaiTopicResources and their operations over a RaiTopicResource. </returns>
+        public virtual RaiTopicCollection GetRaiTopics()
+        {
+            return GetCachedClient(client => new RaiTopicCollection(client, Id));
+        }
+
+        /// <summary>
+        /// Gets the specified custom topic associated with the Azure OpenAI account.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raitopics/{raiTopicName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>RaiTopics_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="RaiTopicResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="raiTopicName"> The name of the Rai Topic associated with the Cognitive Services Account. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="raiTopicName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="raiTopicName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual async Task<Response<RaiTopicResource>> GetRaiTopicAsync(string raiTopicName, CancellationToken cancellationToken = default)
+        {
+            return await GetRaiTopics().GetAsync(raiTopicName, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets the specified custom topic associated with the Azure OpenAI account.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raitopics/{raiTopicName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>RaiTopics_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="RaiTopicResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="raiTopicName"> The name of the Rai Topic associated with the Cognitive Services Account. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="raiTopicName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="raiTopicName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual Response<RaiTopicResource> GetRaiTopic(string raiTopicName, CancellationToken cancellationToken = default)
+        {
+            return GetRaiTopics().Get(raiTopicName, cancellationToken);
+        }
+
+        /// <summary> Gets a collection of RaiToolLabelResources in the CognitiveServicesAccount. </summary>
+        /// <returns> An object representing collection of RaiToolLabelResources and their operations over a RaiToolLabelResource. </returns>
+        public virtual RaiToolLabelCollection GetRaiToolLabels()
+        {
+            return GetCachedClient(client => new RaiToolLabelCollection(client, Id));
+        }
+
+        /// <summary>
+        /// Gets the specified RAI Tool Label associated with the Azure OpenAI account.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiToolLabels/{raiToolConnectionName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>RaiToolLabels_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="RaiToolLabelResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="raiToolConnectionName"> The name of the Rai Tool Label. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="raiToolConnectionName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="raiToolConnectionName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual async Task<Response<RaiToolLabelResource>> GetRaiToolLabelAsync(string raiToolConnectionName, CancellationToken cancellationToken = default)
+        {
+            return await GetRaiToolLabels().GetAsync(raiToolConnectionName, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Gets the specified RAI Tool Label associated with the Azure OpenAI account.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/raiToolLabels/{raiToolConnectionName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>RaiToolLabels_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="RaiToolLabelResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="raiToolConnectionName"> The name of the Rai Tool Label. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="raiToolConnectionName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="raiToolConnectionName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual Response<RaiToolLabelResource> GetRaiToolLabel(string raiToolConnectionName, CancellationToken cancellationToken = default)
+        {
+            return GetRaiToolLabels().Get(raiToolConnectionName, cancellationToken);
         }
 
         /// <summary> Gets a collection of NetworkSecurityPerimeterConfigurationResources in the CognitiveServicesAccount. </summary>
@@ -529,7 +675,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -560,7 +706,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -598,7 +744,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -629,7 +775,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -667,7 +813,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -698,7 +844,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -736,7 +882,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -767,7 +913,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -805,7 +951,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -836,7 +982,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -854,6 +1000,75 @@ namespace Azure.ResourceManager.CognitiveServices
             return GetCognitiveServicesCapabilityHosts().Get(capabilityHostName, cancellationToken);
         }
 
+        /// <summary> Gets a collection of ManagedNetworkSettingsPropertiesBasicResources in the CognitiveServicesAccount. </summary>
+        /// <returns> An object representing collection of ManagedNetworkSettingsPropertiesBasicResources and their operations over a ManagedNetworkSettingsPropertiesBasicResource. </returns>
+        public virtual ManagedNetworkSettingsPropertiesBasicResourceCollection GetManagedNetworkSettingsPropertiesBasicResources()
+        {
+            return GetCachedClient(client => new ManagedNetworkSettingsPropertiesBasicResourceCollection(client, Id));
+        }
+
+        /// <summary>
+        /// Get API for managed network settings of a cognitive services account.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/managedNetworks/{managedNetworkName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>ManagedNetworkSettings_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="ManagedNetworkSettingsPropertiesBasicResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="managedNetworkName"> Name of the managedNetwork associated with the cognitive services account. Only 'default' is supported. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="managedNetworkName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="managedNetworkName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual async Task<Response<ManagedNetworkSettingsPropertiesBasicResource>> GetManagedNetworkSettingsPropertiesBasicResourceAsync(string managedNetworkName, CancellationToken cancellationToken = default)
+        {
+            return await GetManagedNetworkSettingsPropertiesBasicResources().GetAsync(managedNetworkName, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get API for managed network settings of a cognitive services account.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/managedNetworks/{managedNetworkName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>ManagedNetworkSettings_Get</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// <item>
+        /// <term>Resource</term>
+        /// <description><see cref="ManagedNetworkSettingsPropertiesBasicResource"/></description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="managedNetworkName"> Name of the managedNetwork associated with the cognitive services account. Only 'default' is supported. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentNullException"> <paramref name="managedNetworkName"/> is null. </exception>
+        /// <exception cref="ArgumentException"> <paramref name="managedNetworkName"/> is an empty string, and was expected to be non-empty. </exception>
+        [ForwardsClientCalls]
+        public virtual Response<ManagedNetworkSettingsPropertiesBasicResource> GetManagedNetworkSettingsPropertiesBasicResource(string managedNetworkName, CancellationToken cancellationToken = default)
+        {
+            return GetManagedNetworkSettingsPropertiesBasicResources().Get(managedNetworkName, cancellationToken);
+        }
+
         /// <summary>
         /// Returns a Cognitive Services account specified by the parameters.
         /// <list type="bullet">
@@ -867,7 +1082,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -907,7 +1122,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -947,7 +1162,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -989,7 +1204,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1031,7 +1246,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1077,7 +1292,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1123,7 +1338,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1161,7 +1376,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1199,7 +1414,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1241,7 +1456,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1283,7 +1498,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1312,7 +1527,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1341,7 +1556,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1371,7 +1586,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1401,7 +1616,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1431,7 +1646,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1461,7 +1676,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// </list>
         /// </summary>
@@ -1486,7 +1701,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// </list>
         /// </summary>
@@ -1496,6 +1711,166 @@ namespace Azure.ResourceManager.CognitiveServices
         {
             HttpMessage FirstPageRequest(int? pageSizeHint) => _privateLinkResourcesRestClient.CreateListRequest(Id.SubscriptionId, Id.ResourceGroupName, Id.Name);
             return GeneratorPageableHelpers.CreatePageable(FirstPageRequest, null, e => CognitiveServicesPrivateLinkResource.DeserializeCognitiveServicesPrivateLinkResource(e), _privateLinkResourcesClientDiagnostics, Pipeline, "CognitiveServicesAccountResource.GetPrivateLinkResources", "value", null, cancellationToken);
+        }
+
+        /// <summary>
+        /// Test the rai safety provider associated with the subscription.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/testRaiExternalSafetyProvider/{safetyProviderName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>TestRaiExternalSafetyProvider_CreateOrUpdate</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="safetyProviderName"> The name of the Rai External Safety Provider associated with the Cognitive Services Account. </param>
+        /// <param name="data"> Properties describing the rai external safety provider. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentException"> <paramref name="safetyProviderName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="safetyProviderName"/> or <paramref name="data"/> is null. </exception>
+        public virtual async Task<Response<RaiExternalSafetyProviderSchemaResource>> CreateOrUpdateTestRaiExternalSafetyProviderAsync(string safetyProviderName, RaiExternalSafetyProviderSchemaData data, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(safetyProviderName, nameof(safetyProviderName));
+            Argument.AssertNotNull(data, nameof(data));
+
+            using var scope = _testRaiExternalSafetyProviderClientDiagnostics.CreateScope("CognitiveServicesAccountResource.CreateOrUpdateTestRaiExternalSafetyProvider");
+            scope.Start();
+            try
+            {
+                var response = await _testRaiExternalSafetyProviderRestClient.CreateOrUpdateAsync(Id.SubscriptionId, Id.ResourceGroupName, Id.Name, safetyProviderName, data, cancellationToken).ConfigureAwait(false);
+                return Response.FromValue(new RaiExternalSafetyProviderSchemaResource(Client, response.Value), response.GetRawResponse());
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Test the rai safety provider associated with the subscription.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/testRaiExternalSafetyProvider/{safetyProviderName}</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>TestRaiExternalSafetyProvider_CreateOrUpdate</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="safetyProviderName"> The name of the Rai External Safety Provider associated with the Cognitive Services Account. </param>
+        /// <param name="data"> Properties describing the rai external safety provider. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        /// <exception cref="ArgumentException"> <paramref name="safetyProviderName"/> is an empty string, and was expected to be non-empty. </exception>
+        /// <exception cref="ArgumentNullException"> <paramref name="safetyProviderName"/> or <paramref name="data"/> is null. </exception>
+        public virtual Response<RaiExternalSafetyProviderSchemaResource> CreateOrUpdateTestRaiExternalSafetyProvider(string safetyProviderName, RaiExternalSafetyProviderSchemaData data, CancellationToken cancellationToken = default)
+        {
+            Argument.AssertNotNullOrEmpty(safetyProviderName, nameof(safetyProviderName));
+            Argument.AssertNotNull(data, nameof(data));
+
+            using var scope = _testRaiExternalSafetyProviderClientDiagnostics.CreateScope("CognitiveServicesAccountResource.CreateOrUpdateTestRaiExternalSafetyProvider");
+            scope.Start();
+            try
+            {
+                var response = _testRaiExternalSafetyProviderRestClient.CreateOrUpdate(Id.SubscriptionId, Id.ResourceGroupName, Id.Name, safetyProviderName, data, cancellationToken);
+                return Response.FromValue(new RaiExternalSafetyProviderSchemaResource(Client, response.Value), response.GetRawResponse());
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Provisions the managed network of a cognitive services account.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/provisionManagedNetwork</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>ManagedNetworkProvisions_ProvisionManagedNetwork</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="waitUntil"> <see cref="WaitUntil.Completed"/> if the method should wait to return until the long-running operation has completed on the service; <see cref="WaitUntil.Started"/> if it should return after starting the operation. For more information on long-running operations, please see <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/LongRunningOperations.md"> Azure.Core Long-Running Operation samples</see>. </param>
+        /// <param name="body"> Managed Network Provisioning Options for a cognitive services account. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        public virtual async Task<ArmOperation<ManagedNetworkProvisionStatus>> ProvisionManagedNetworkManagedNetworkProvisionAsync(WaitUntil waitUntil, BinaryData body = null, CancellationToken cancellationToken = default)
+        {
+            using var scope = _managedNetworkProvisionsClientDiagnostics.CreateScope("CognitiveServicesAccountResource.ProvisionManagedNetworkManagedNetworkProvision");
+            scope.Start();
+            try
+            {
+                var response = await _managedNetworkProvisionsRestClient.ProvisionManagedNetworkAsync(Id.SubscriptionId, Id.ResourceGroupName, Id.Name, body, cancellationToken).ConfigureAwait(false);
+                var operation = new CognitiveServicesArmOperation<ManagedNetworkProvisionStatus>(new ManagedNetworkProvisionStatusOperationSource(), _managedNetworkProvisionsClientDiagnostics, Pipeline, _managedNetworkProvisionsRestClient.CreateProvisionManagedNetworkRequest(Id.SubscriptionId, Id.ResourceGroupName, Id.Name, body).Request, response, OperationFinalStateVia.Location);
+                if (waitUntil == WaitUntil.Completed)
+                    await operation.WaitForCompletionAsync(cancellationToken).ConfigureAwait(false);
+                return operation;
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Provisions the managed network of a cognitive services account.
+        /// <list type="bullet">
+        /// <item>
+        /// <term>Request Path</term>
+        /// <description>/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.CognitiveServices/accounts/{accountName}/provisionManagedNetwork</description>
+        /// </item>
+        /// <item>
+        /// <term>Operation Id</term>
+        /// <description>ManagedNetworkProvisions_ProvisionManagedNetwork</description>
+        /// </item>
+        /// <item>
+        /// <term>Default Api Version</term>
+        /// <description>2025-10-01-preview</description>
+        /// </item>
+        /// </list>
+        /// </summary>
+        /// <param name="waitUntil"> <see cref="WaitUntil.Completed"/> if the method should wait to return until the long-running operation has completed on the service; <see cref="WaitUntil.Started"/> if it should return after starting the operation. For more information on long-running operations, please see <see href="https://github.com/Azure/azure-sdk-for-net/blob/main/sdk/core/Azure.Core/samples/LongRunningOperations.md"> Azure.Core Long-Running Operation samples</see>. </param>
+        /// <param name="body"> Managed Network Provisioning Options for a cognitive services account. </param>
+        /// <param name="cancellationToken"> The cancellation token to use. </param>
+        public virtual ArmOperation<ManagedNetworkProvisionStatus> ProvisionManagedNetworkManagedNetworkProvision(WaitUntil waitUntil, BinaryData body = null, CancellationToken cancellationToken = default)
+        {
+            using var scope = _managedNetworkProvisionsClientDiagnostics.CreateScope("CognitiveServicesAccountResource.ProvisionManagedNetworkManagedNetworkProvision");
+            scope.Start();
+            try
+            {
+                var response = _managedNetworkProvisionsRestClient.ProvisionManagedNetwork(Id.SubscriptionId, Id.ResourceGroupName, Id.Name, body, cancellationToken);
+                var operation = new CognitiveServicesArmOperation<ManagedNetworkProvisionStatus>(new ManagedNetworkProvisionStatusOperationSource(), _managedNetworkProvisionsClientDiagnostics, Pipeline, _managedNetworkProvisionsRestClient.CreateProvisionManagedNetworkRequest(Id.SubscriptionId, Id.ResourceGroupName, Id.Name, body).Request, response, OperationFinalStateVia.Location);
+                if (waitUntil == WaitUntil.Completed)
+                    operation.WaitForCompletion(cancellationToken);
+                return operation;
+            }
+            catch (Exception e)
+            {
+                scope.Failed(e);
+                throw;
+            }
         }
 
         /// <summary>
@@ -1511,7 +1886,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1573,7 +1948,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1635,7 +2010,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1692,7 +2067,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1749,7 +2124,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>
@@ -1809,7 +2184,7 @@ namespace Azure.ResourceManager.CognitiveServices
         /// </item>
         /// <item>
         /// <term>Default Api Version</term>
-        /// <description>2025-06-01</description>
+        /// <description>2025-10-01-preview</description>
         /// </item>
         /// <item>
         /// <term>Resource</term>

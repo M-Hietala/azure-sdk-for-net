@@ -26,12 +26,6 @@ namespace Azure.ResourceManager.CognitiveServices.Models
             commitmentPlanAssociations ??= new List<CommitmentPlanAssociation>();
             associatedProjects ??= new List<string>();
 
-            List<AIFoundryNetworkInjection> aiFoundryNetworkInjections = new List<AIFoundryNetworkInjection>();
-            if (aiFoundryNetworkInjection != null)
-            {
-                aiFoundryNetworkInjections.Add(aiFoundryNetworkInjection);
-            }
-
             return new CognitiveServicesAccountProperties(
                 provisioningState,
                 endpoint,
@@ -50,6 +44,7 @@ namespace Azure.ResourceManager.CognitiveServices.Models
                 createdOn,
                 callRateLimit,
                 enableDynamicThrottling,
+                null,
                 quotaLimit,
                 restrictOutboundNetworkAccess,
                 allowedFqdnList?.ToList(),
@@ -62,7 +57,7 @@ namespace Azure.ResourceManager.CognitiveServices.Models
                 commitmentPlanAssociations?.ToList(),
                 abusePenalty,
                 raiMonitorConfig,
-                aiFoundryNetworkInjections?.ToList(),
+                aiFoundryNetworkInjection,
                 allowProjectManagement,
                 defaultProject,
                 associatedProjects?.ToList(),

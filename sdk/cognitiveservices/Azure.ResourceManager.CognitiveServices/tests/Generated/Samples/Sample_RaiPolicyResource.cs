@@ -20,8 +20,8 @@ namespace Azure.ResourceManager.CognitiveServices.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task Get_GetRaiPolicy()
         {
-            // Generated from example definition: specification/cognitiveservices/resource-manager/Microsoft.CognitiveServices/stable/2025-06-01/examples/GetRaiPolicy.json
-            // this example is just showing the usage of "RaiPolicies_Get" operation, for the dependent resources, they will have to be created separately.
+            // Generated from example definition: specification/cognitiveservices/resource-manager/Microsoft.CognitiveServices/preview/2025-10-01-preview/examples/GetRaiPolicy.json
+            // this example is just showing the usage of "SubscriptionRaiPolicy_Get" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
             TokenCredential cred = new DefaultAzureCredential();
@@ -31,10 +31,8 @@ namespace Azure.ResourceManager.CognitiveServices.Samples
             // this example assumes you already have this RaiPolicyResource created on azure
             // for more information of creating RaiPolicyResource, please refer to the document of RaiPolicyResource
             string subscriptionId = "00000000-0000-0000-0000-000000000000";
-            string resourceGroupName = "resourceGroupName";
-            string accountName = "accountName";
             string raiPolicyName = "raiPolicyName";
-            ResourceIdentifier raiPolicyResourceId = RaiPolicyResource.CreateResourceIdentifier(subscriptionId, resourceGroupName, accountName, raiPolicyName);
+            ResourceIdentifier raiPolicyResourceId = RaiPolicyResource.CreateResourceIdentifier(subscriptionId, raiPolicyName);
             RaiPolicyResource raiPolicy = client.GetRaiPolicyResource(raiPolicyResourceId);
 
             // invoke the operation
@@ -51,8 +49,8 @@ namespace Azure.ResourceManager.CognitiveServices.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task Delete_DeleteRaiPolicy()
         {
-            // Generated from example definition: specification/cognitiveservices/resource-manager/Microsoft.CognitiveServices/stable/2025-06-01/examples/DeleteRaiPolicy.json
-            // this example is just showing the usage of "RaiPolicies_Delete" operation, for the dependent resources, they will have to be created separately.
+            // Generated from example definition: specification/cognitiveservices/resource-manager/Microsoft.CognitiveServices/preview/2025-10-01-preview/examples/DeleteRaiPolicy.json
+            // this example is just showing the usage of "SubscriptionRaiPolicy_Delete" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
             TokenCredential cred = new DefaultAzureCredential();
@@ -62,10 +60,8 @@ namespace Azure.ResourceManager.CognitiveServices.Samples
             // this example assumes you already have this RaiPolicyResource created on azure
             // for more information of creating RaiPolicyResource, please refer to the document of RaiPolicyResource
             string subscriptionId = "00000000-0000-0000-0000-000000000000";
-            string resourceGroupName = "resourceGroupName";
-            string accountName = "accountName";
             string raiPolicyName = "raiPolicyName";
-            ResourceIdentifier raiPolicyResourceId = RaiPolicyResource.CreateResourceIdentifier(subscriptionId, resourceGroupName, accountName, raiPolicyName);
+            ResourceIdentifier raiPolicyResourceId = RaiPolicyResource.CreateResourceIdentifier(subscriptionId, raiPolicyName);
             RaiPolicyResource raiPolicy = client.GetRaiPolicyResource(raiPolicyResourceId);
 
             // invoke the operation
@@ -78,8 +74,8 @@ namespace Azure.ResourceManager.CognitiveServices.Samples
         [Ignore("Only validating compilation of examples")]
         public async Task Update_PutRaiPolicy()
         {
-            // Generated from example definition: specification/cognitiveservices/resource-manager/Microsoft.CognitiveServices/stable/2025-06-01/examples/PutRaiPolicy.json
-            // this example is just showing the usage of "RaiPolicies_CreateOrUpdate" operation, for the dependent resources, they will have to be created separately.
+            // Generated from example definition: specification/cognitiveservices/resource-manager/Microsoft.CognitiveServices/preview/2025-10-01-preview/examples/PutRaiPolicy.json
+            // this example is just showing the usage of "SubscriptionRaiPolicy_CreateOrUpdate" operation, for the dependent resources, they will have to be created separately.
 
             // get your azure access token, for more details of how Azure SDK get your access token, please refer to https://learn.microsoft.com/en-us/dotnet/azure/sdk/authentication?tabs=command-line
             TokenCredential cred = new DefaultAzureCredential();
@@ -89,10 +85,8 @@ namespace Azure.ResourceManager.CognitiveServices.Samples
             // this example assumes you already have this RaiPolicyResource created on azure
             // for more information of creating RaiPolicyResource, please refer to the document of RaiPolicyResource
             string subscriptionId = "00000000-0000-0000-0000-000000000000";
-            string resourceGroupName = "resourceGroupName";
-            string accountName = "accountName";
             string raiPolicyName = "raiPolicyName";
-            ResourceIdentifier raiPolicyResourceId = RaiPolicyResource.CreateResourceIdentifier(subscriptionId, resourceGroupName, accountName, raiPolicyName);
+            ResourceIdentifier raiPolicyResourceId = RaiPolicyResource.CreateResourceIdentifier(subscriptionId, raiPolicyName);
             RaiPolicyResource raiPolicy = client.GetRaiPolicyResource(raiPolicyResourceId);
 
             // invoke the operation

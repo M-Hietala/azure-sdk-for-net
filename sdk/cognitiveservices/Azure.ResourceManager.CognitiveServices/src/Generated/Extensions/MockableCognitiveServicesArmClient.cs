@@ -131,6 +131,18 @@ namespace Azure.ResourceManager.CognitiveServices.Mocking
         }
 
         /// <summary>
+        /// Gets an object representing an <see cref="AccountRaiPolicyResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="AccountRaiPolicyResource.CreateResourceIdentifier" /> to create an <see cref="AccountRaiPolicyResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="AccountRaiPolicyResource"/> object. </returns>
+        public virtual AccountRaiPolicyResource GetAccountRaiPolicyResource(ResourceIdentifier id)
+        {
+            AccountRaiPolicyResource.ValidateResourceId(id);
+            return new AccountRaiPolicyResource(Client, id);
+        }
+
+        /// <summary>
         /// Gets an object representing a <see cref="RaiPolicyResource"/> along with the instance operations that can be performed on it but with no data.
         /// You can use <see cref="RaiPolicyResource.CreateResourceIdentifier" /> to create a <see cref="RaiPolicyResource"/> <see cref="ResourceIdentifier"/> from its components.
         /// </summary>
@@ -164,6 +176,42 @@ namespace Azure.ResourceManager.CognitiveServices.Mocking
         {
             RaiBlocklistItemResource.ValidateResourceId(id);
             return new RaiBlocklistItemResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="RaiTopicResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="RaiTopicResource.CreateResourceIdentifier" /> to create a <see cref="RaiTopicResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="RaiTopicResource"/> object. </returns>
+        public virtual RaiTopicResource GetRaiTopicResource(ResourceIdentifier id)
+        {
+            RaiTopicResource.ValidateResourceId(id);
+            return new RaiTopicResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="RaiExternalSafetyProviderSchemaResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="RaiExternalSafetyProviderSchemaResource.CreateResourceIdentifier" /> to create a <see cref="RaiExternalSafetyProviderSchemaResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="RaiExternalSafetyProviderSchemaResource"/> object. </returns>
+        public virtual RaiExternalSafetyProviderSchemaResource GetRaiExternalSafetyProviderSchemaResource(ResourceIdentifier id)
+        {
+            RaiExternalSafetyProviderSchemaResource.ValidateResourceId(id);
+            return new RaiExternalSafetyProviderSchemaResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="RaiToolLabelResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="RaiToolLabelResource.CreateResourceIdentifier" /> to create a <see cref="RaiToolLabelResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="RaiToolLabelResource"/> object. </returns>
+        public virtual RaiToolLabelResource GetRaiToolLabelResource(ResourceIdentifier id)
+        {
+            RaiToolLabelResource.ValidateResourceId(id);
+            return new RaiToolLabelResource(Client, id);
         }
 
         /// <summary>
@@ -260,6 +308,66 @@ namespace Azure.ResourceManager.CognitiveServices.Mocking
         {
             CognitiveServicesProjectCapabilityHostResource.ValidateResourceId(id);
             return new CognitiveServicesProjectCapabilityHostResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="QuotaTierResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="QuotaTierResource.CreateResourceIdentifier" /> to create a <see cref="QuotaTierResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="QuotaTierResource"/> object. </returns>
+        public virtual QuotaTierResource GetQuotaTierResource(ResourceIdentifier id)
+        {
+            QuotaTierResource.ValidateResourceId(id);
+            return new QuotaTierResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing an <see cref="OutboundRuleBasicResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="OutboundRuleBasicResource.CreateResourceIdentifier" /> to create an <see cref="OutboundRuleBasicResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="OutboundRuleBasicResource"/> object. </returns>
+        public virtual OutboundRuleBasicResource GetOutboundRuleBasicResource(ResourceIdentifier id)
+        {
+            OutboundRuleBasicResource.ValidateResourceId(id);
+            return new OutboundRuleBasicResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing a <see cref="ManagedNetworkSettingsPropertiesBasicResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="ManagedNetworkSettingsPropertiesBasicResource.CreateResourceIdentifier" /> to create a <see cref="ManagedNetworkSettingsPropertiesBasicResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="ManagedNetworkSettingsPropertiesBasicResource"/> object. </returns>
+        public virtual ManagedNetworkSettingsPropertiesBasicResource GetManagedNetworkSettingsPropertiesBasicResource(ResourceIdentifier id)
+        {
+            ManagedNetworkSettingsPropertiesBasicResource.ValidateResourceId(id);
+            return new ManagedNetworkSettingsPropertiesBasicResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing an <see cref="AgentApplicationResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="AgentApplicationResource.CreateResourceIdentifier" /> to create an <see cref="AgentApplicationResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="AgentApplicationResource"/> object. </returns>
+        public virtual AgentApplicationResource GetAgentApplicationResource(ResourceIdentifier id)
+        {
+            AgentApplicationResource.ValidateResourceId(id);
+            return new AgentApplicationResource(Client, id);
+        }
+
+        /// <summary>
+        /// Gets an object representing an <see cref="AgentDeploymentResource"/> along with the instance operations that can be performed on it but with no data.
+        /// You can use <see cref="AgentDeploymentResource.CreateResourceIdentifier" /> to create an <see cref="AgentDeploymentResource"/> <see cref="ResourceIdentifier"/> from its components.
+        /// </summary>
+        /// <param name="id"> The resource ID of the resource to get. </param>
+        /// <returns> Returns a <see cref="AgentDeploymentResource"/> object. </returns>
+        public virtual AgentDeploymentResource GetAgentDeploymentResource(ResourceIdentifier id)
+        {
+            AgentDeploymentResource.ValidateResourceId(id);
+            return new AgentDeploymentResource(Client, id);
         }
     }
 }

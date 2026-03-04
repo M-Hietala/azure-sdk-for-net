@@ -8,8 +8,8 @@ azure-arm: true
 csharp: true
 library-name: CognitiveServices
 namespace: Azure.ResourceManager.CognitiveServices
-require: https://github.com/Azure/azure-rest-api-specs/blob/78c97002d557d9aca3f8220b4a4774ed5aae3a09/specification/cognitiveservices/resource-manager/readme.md
-#tag: package-2025-06-01
+require: https://github.com/Azure/azure-rest-api-specs/blob/3fca7cc3fad830b1b6876ece433c82fd405f44d1/specification/cognitiveservices/resource-manager/readme.md
+tag: package-2025-10-01-preview
 output-folder: $(this-folder)/Generated
 clear-output-folder: true
 sample-gen:
@@ -124,6 +124,8 @@ rename-mapping:
   AccountProperties.networkInjections: AIFoundryNetworkInjections
   PATAuthTypeConnectionProperties: PatAuthTypeConnectionProperties
   ScenarioType: AIFoundryNetworkInjectionScenarioType
+  ApplicationAuthorizationPolicy.type: AuthorizationType
+  ManagedNetworkProvisionStatus.status: NetworkStatus
 
 prepend-rp-prefix:
   - Account
