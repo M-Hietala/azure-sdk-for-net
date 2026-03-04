@@ -1,6 +1,11 @@
 # Release History
 
-## 1.6.0-beta.1 (2026-03-10)
+## 1.6.0-beta.1 (Unreleased)
+
+### Features Added
+
+- Added resource management based on the 2025-10-01-preview Management API:
+  - Cognitive Services Managed Network
 
 ## 1.5.2 (2025-11-11)
 
